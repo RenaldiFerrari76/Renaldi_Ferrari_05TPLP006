@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi Manajemen Izin</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: #f0f4f8; /* Softer background color */
+            color: #333;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #333; /* Soft blue */
+            color: #fff;
+            position: fixed;
+            height: 100vh;
+            padding: 20px 0;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s ease;
+        }
+
+        .sidebar .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar .logo img {
+            width: 60%;
+            border-radius: 50%;
+        }
+
+        .sidebar .welcome {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar .welcome img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .sidebar .welcome p {
+            margin: 0;
+            font-size: 0.9em;
+            line-height: 1.2;
+            text-align: left;
+        }
+
+        .sidebar .menu-heading {
+            padding: 10px 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #f8f9fa;
+            margin-top: 20px;
+        }
+
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            font-size: 1em;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border-radius: 5px;
+        }
+
+        .sidebar .menu-item:hover {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .sidebar .menu-item.active {
+            background-color: #333; /* Active item background color */
+        }
+
+        .sidebar .menu-item i {
+            margin-right: 10px;
+        }
+
+        /* Submenu styles */
+        .submenu {
+            display: none; 
+            padding-left: 20px;
+        }
+
+        /* Content */
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            flex: 1;
+        }
+
+        .dashboard-header {
+            background-color: #333; /* Soft blue */
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff; /* White background for table */
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #333; /* Header background color */
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1; /* Light gray on row hover */
+        }
+
+        /* Button */
+        .btn-add {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #28a745; /* Green */
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            margin-bottom: 20px; /* Margin for spacing */
+        }
+
+        .btn-add:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px; 
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Form Styles */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin: 10px 0 5px;
+        }
+
+        input[type="text"], select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            width: 100%; 
+            box-sizing: border-box; 
+        }
+    </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+        <img src="img/UNPAM_logo1.png" alt="University Logo">
+        <h2>Universitas Pamulang</h2>
+    </div>
+    <div class="welcome">
+        <img src="img/UNPAM_logo1.png" alt="Profile Picture">
+        <p>Welcome, Renaldi<br><small>Administrator</small></p>
+    </div>
+    <a href="index.html" class="menu-item">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+    </a>
+    <div class="menu-heading" onclick="toggleSubmenu('karyawanSubmenu')">MENU KARYAWAN
+        <i class="fas fa-chevron-down" style="float:right;"></i>
+    </div>
+    <div id="karyawanSubmenu" style="display: none;">
+        <a href="karyawan.html" class="menu-item"> 
+            <i class="fas fa-users"></i>
+            <span>Karyawan</span>
+        </a>
+        <a href="jabatan.html" class="menu-item">
+            <i class="fas fa-briefcase"></i>
+            <span>Jabatan</span>
+        </a>
+        <a href="divisi.html" class="menu-item">
+            <i class="fas fa-sitemap"></i>
+            <span>Divisi</span>
+        </a>
+    </div>
+
+    <div class="menu-heading" onclick="toggleSubmenu('absensiSubmenu')">MENU ABSENSI
+        <i class="fas fa-chevron-down" style="float:right;"></i>
+    </div>
+    <div id="absensiSubmenu" style="display: none;">
+        <a href="absensi.html" class="menu-item">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Absensi</span>
+        </a>
+        <a href="izin.html" class="menu-item">
+            <i class="fas fa-file-alt"></i>
+            <span>Izin</span>
+        </a>
+        <a href="lembur.html" class="menu-item">
+            <i class="fas fa-clock"></i>
+            <span>Lembur</span>
+        </a>
+    </div>
+</div>
+
+
+     <!-- Content -->
+     <div class="content">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <h1>Sistem Informasi Manajemen Jabatan</h1>
+            <p>Admin Dashboard</p>
+        </div>
+
+        <!-- Add Job Button -->
+        <a href="add_jabatan.html" class="btn-add">Tambah Jabatan</a>
+
+        <!-- Job Position Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Kode Jabatan</th>
+                    <th>Jabatan</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>JAB01</td>
+                    <td>Administrator</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn-delete"><i class="fas fa-trash"></i> Hapus</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>JAB02</td>
+                    <td>Staff</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn-delete"><i class="fas fa-trash"></i> Hapus</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>JAB03</td>
+                    <td>HR</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn-delete"><i class="fas fa-trash"></i> Hapus</button>
+                        </div>
+                    </td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Modal functionality
+        var modal = document.getElementById("myModal");
+        var btn = document.getElementById("openModal");
+        var span = document.getElementsByClassName("close")[0];
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Submenu toggle
+        function toggleSubmenu(submenuId) {
+            var submenu = document.getElementById(submenuId);
+            submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+        }
+    </script>
+</body>
+</html>
